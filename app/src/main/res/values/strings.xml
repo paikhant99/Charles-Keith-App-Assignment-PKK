@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Charles-Keith-App-Assignment-PKK</string>
+
+    <string name="empty_string">There is no data available now.</string>
 </resources>

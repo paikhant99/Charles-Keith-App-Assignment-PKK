@@ -31,44 +31,47 @@ public class RetrofitDataAgentImpl implements ProductsDataAgent {
 
     private RetrofitDataAgentImpl() {
 
-        OkHttpClient okHttpClient=new OkHttpClient.Builder()
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(60,TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
                 .build();
 
-        Retrofit retrofit=new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(CKConstants.API_BASED_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();
 
-        ckApi=retrofit.create(CKApi.class);
+        ckApi = retrofit.create(CKApi.class);
     }
 
-    public static RetrofitDataAgentImpl getmObjInstance(){
-        if(mObjInstance==null){
-            mObjInstance=new RetrofitDataAgentImpl();
+    public static RetrofitDataAgentImpl getmObjInstance() {
+        if (mObjInstance == null) {
+            mObjInstance = new RetrofitDataAgentImpl();
         }
         return mObjInstance;
     }
 
     @Override
-    public void loadProductsList(String accessToken,int page) {
-        Call<GetNewProductsResponse> newProductsResponse=ckApi.loadProductsList(accessToken,page);
+    public void loadProductsList(String accessToken, int page) {
+        Call<GetNewProductsResponse> newProductsResponse = ckApi.loadProductsList(accessToken, page);
         newProductsResponse.enqueue(new Callback<GetNewProductsResponse>() {
             @Override
             public void onResponse(Call<GetNewProductsResponse> call, Response<GetNewProductsResponse> response) {
-                GetNewProductsResponse productsResponse=response.body();
-                if(productsResponse!=null && productsResponse.isResponseOk()){
-                    SuccessGetProductsEvent successEvent=new SuccessGetProductsEvent(productsResponse.getNewProducts());
+                GetNewProductsResponse productsResponse = response.body();
+                if (productsResponse != null && productsResponse.isResponseOk()) {
+                    SuccessGetProductsEvent successEvent = new SuccessGetProductsEvent(productsResponse.getNewProducts());
                     EventBus.getDefault().post(successEvent);
-                }else{
-                    if(productsResponse==null){
-                        ApiErrorEvent errorEvent=new ApiErrorEvent("Empty New Products Available");
+                } else {
+                    if (productsResponse == null) {
+                        ApiErrorEvent errorEvent = new ApiErrorEvent("Empty Data Available");
+                        EventBus.getDefault().post(errorEvent);
+                    } else if(productsResponse.getNewProducts()==null){
+                        ApiErrorEvent errorEvent = new ApiErrorEvent("null");
                         EventBus.getDefault().post(errorEvent);
                     }else{
-                        ApiErrorEvent errorEvent=new ApiErrorEvent(productsResponse.getMessage());
+                        ApiErrorEvent errorEvent = new ApiErrorEvent(productsResponse.getMessage());
                         EventBus.getDefault().post(errorEvent);
                     }
                 }
@@ -76,7 +79,7 @@ public class RetrofitDataAgentImpl implements ProductsDataAgent {
 
             @Override
             public void onFailure(Call<GetNewProductsResponse> call, Throwable t) {
-                ApiErrorEvent failureEvent=new ApiErrorEvent(t.getMessage());
+                ApiErrorEvent failureEvent = new ApiErrorEvent(t.getMessage());
                 EventBus.getDefault().post(failureEvent);
             }
         });

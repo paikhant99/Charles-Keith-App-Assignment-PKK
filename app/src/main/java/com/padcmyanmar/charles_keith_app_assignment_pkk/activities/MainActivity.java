@@ -15,8 +15,10 @@ import com.padcmyanmar.charles_keith_app_assignment_pkk.adapters.NewProductsAdap
 import com.padcmyanmar.charles_keith_app_assignment_pkk.data.models.NewProductModel;
 import com.padcmyanmar.charles_keith_app_assignment_pkk.data.vos.NewProductVO;
 import com.padcmyanmar.charles_keith_app_assignment_pkk.delegates.ProductsDelegate;
+import com.padcmyanmar.charles_keith_app_assignment_pkk.events.ApiErrorEvent;
 import com.padcmyanmar.charles_keith_app_assignment_pkk.events.SuccessGetProductsEvent;
 import com.padcmyanmar.charles_keith_app_assignment_pkk.utils.CKConstants;
+import com.padcmyanmar.charles_keith_app_assignment_pkk.viewpods.EmptyViewPod;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +37,9 @@ public class MainActivity extends BaseActivity implements ProductsDelegate {
 
     @BindView(R.id.rv_products)
     RecyclerView rvProducts;
+
+    @BindView(R.id.vp_empty)
+    EmptyViewPod vpEmpty;
 
     private NewProductsAdapter productsAdapter;
 
@@ -91,6 +96,8 @@ public class MainActivity extends BaseActivity implements ProductsDelegate {
             }
         });
 
+        vpEmpty.setVisibility(View.GONE);
+
         NewProductModel.getmObjInstance().loadProductsList();
 
     }
@@ -116,7 +123,16 @@ public class MainActivity extends BaseActivity implements ProductsDelegate {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSuccessGetProducts(SuccessGetProductsEvent successEvent){
+        vpEmpty.setVisibility(View.GONE);
         productsAdapter.appendProductsList(successEvent.getmProductsList());
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFailGetProducts(ApiErrorEvent errorEvent){
+        if(errorEvent.getMessage()!="null"){
+            vpEmpty.setVisibility(View.VISIBLE);
+            vpEmpty.setEmptyResources(R.drawable.empty_data_placeholder,errorEvent.getMessage());
+        }
     }
 }

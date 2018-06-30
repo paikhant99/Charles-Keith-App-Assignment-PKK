@@ -60,7 +60,8 @@
                 android:layout_height="wrap_content"
                 android:text="YOU MAY ALSO LIKE"
                 android:layout_below="@id/iv_details_product_image"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/margin_medium"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_more_products"
@@ -70,6 +71,29 @@
                 android:layout_marginLeft="@dimen/margin_medium_2"
                 android:layout_marginRight="@dimen/margin_medium_2"
                 android:layout_marginBottom="@dimen/margin_medium_2"/>
+
+            <TextView
+                android:id="@+id/tv_add_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="INFO"
+                android:drawableLeft="@drawable/ic_add_black_24dp"
+                android:layout_below="@id/tv_details_product_title"
+                android:layout_alignRight="@id/iv_details_product_image"
+                android:layout_marginRight="@dimen/margin_medium_2"
+                android:layout_marginTop="@dimen/margin_medium_2"
+                android:padding="@dimen/margin_small"
+                android:background="@color/btnbackground_white"
+                android:layout_marginBottom="@dimen/margin_medium"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COLOURS"
+                android:rotation="270"
+                android:layout_below="@id/tv_add_info"
+                android:layout_toRightOf="@id/iv_details_product_image"
+                android:layout_marginTop="@dimen/margin_medium_3"/>
         </RelativeLayout>
     </ScrollView>
 

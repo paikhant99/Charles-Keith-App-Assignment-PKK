@@ -6,4 +6,7 @@
     <color name="icons">#FFFFFF</color>
     <color name="texts">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
+
+    <color name="btnbackground_white">#FFFFFF</color>
+    <color name="btnbackground_black">#000000</color>
 </resources>

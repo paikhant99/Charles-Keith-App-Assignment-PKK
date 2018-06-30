@@ -1,6 +1,7 @@
 package com.padcmyanmar.charles_keith_app_assignment_pkk.data.models;
 
 import com.padcmyanmar.charles_keith_app_assignment_pkk.data.vos.NewProductVO;
+import com.padcmyanmar.charles_keith_app_assignment_pkk.events.ApiErrorEvent;
 import com.padcmyanmar.charles_keith_app_assignment_pkk.events.SuccessGetProductsEvent;
 import com.padcmyanmar.charles_keith_app_assignment_pkk.network.RetrofitDataAgentImpl;
 
@@ -50,10 +51,15 @@ public class NewProductModel {
         return mProductsMap;
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onSuccessGetNewProducts(SuccessGetProductsEvent successEvent){
         setDataIntoRespository(successEvent.getmProductsList());
         mPage++;
+    }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onFailGetNewProducts(ApiErrorEvent errorEvent) {
+
     }
 
     private void setDataIntoRespository(List<NewProductVO> productList){
